@@ -1,0 +1,25 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: cursos_postgres
+    environment:
+      POSTGRES_DB: cursos_db
+      POSTGRES_USER: cursos_user
+      POSTGRES_PASSWORD: cursos_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "54321:5432"
+    restart: unless-stopped
+
+  app:
+    build: .
+    container_name: cursos-backend
+    ports:
+      - "8005:80"
+    depends_on:
+      - db
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
