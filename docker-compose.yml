@@ -19,6 +19,9 @@ services:
       - "8005:80"
     depends_on:
       - db
+    volumes:
+      - .:/var/www/html
+      - /var/www/html/vendor
     restart: unless-stopped
 
 volumes:

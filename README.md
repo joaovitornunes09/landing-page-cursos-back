@@ -9,6 +9,7 @@ API REST desenvolvida em **Laravel 11** para gerenciar cursos e competências.
 - [💻 Requisitos](#-requisitos)
 - [🛠️ Instalação](#%EF%B8%8F-instalação)
 - [📚 API](#-api)
+- [📖 Documentação](#-documentação)
 - [🗂️ Estrutura](#%EF%B8%8F-estrutura)
 
 ## 🚀 Tecnologias
@@ -95,6 +96,39 @@ http://localhost:8005/api
 | `POST` | `/courses` | Criar novo curso |
 | `PUT` | `/courses/{id}` | Atualizar curso |
 | `DELETE` | `/courses/{id}` | Deletar curso |
+
+## 📖 Documentação
+
+### 🔍 Swagger/OpenAPI
+
+A API possui documentação interativa completa usando **Swagger/OpenAPI 3.0**:
+
+**🌐 Acesse a documentação:**
+```
+http://localhost:8005/api/documentation
+```
+
+### 📋 Funcionalidades da Documentação
+
+✅ **Interface interativa** - Teste endpoints diretamente
+✅ **Schemas detalhados** - Estrutura completa dos dados
+✅ **Exemplos de requisição** - Para todos os endpoints
+✅ **Validações documentadas** - Regras e tipos de dados
+✅ **Códigos de resposta** - Status codes e estruturas
+
+### 📂 Endpoints Documentados
+
+- 📚 **Cursos** - CRUD completo com upload de arquivos
+- 🏷️ **Módulos** - Relacionamentos e ordenação
+- 🎯 **Competências** - Estrutura hierárquica
+- ℹ️ **Informações de Decisão** - Dados complementares
+
+### 🔄 Regenerar Documentação
+
+```bash
+# Regenerar a documentação após mudanças
+docker exec cursos-backend php artisan l5-swagger:generate
+```
 
 ## 🗂️ Estrutura
 

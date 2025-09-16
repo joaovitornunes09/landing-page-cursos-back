@@ -36,8 +36,8 @@ class CourseSeeder extends Seeder
             'level' => 'Técnico',
             'category' => 'Tecnologia E PROFISSÃO',
             'owner' => 'O POVO',
-            'image' => 'imagens-banners/secretaria-escolar.png',
-            'banner' => 'imagens-banners/secretaria-escolar.png'
+            'image' => 'courses/images/secretaria-escolar.png',
+            'banner' => 'courses/banners/secretaria-escolar.png'
         ]);
 
         CourseModule::create([
@@ -165,8 +165,8 @@ class CourseSeeder extends Seeder
             'level' => 'Básico',
             'category' => 'Meio Ambiente',
             'owner' => 'Fundação Demócrito Rocha',
-            'image' => 'imagens-banners/educacao-ambiental-para-um-presente-sustentavel.png',
-            'banner' => 'imagens-banners/educacao-ambiental-para-um-presente-sustentavel.png'
+            'image' => 'courses/images/educacao-ambiental-para-um-presente-sustentavel.png',
+            'banner' => 'courses/banners/educacao-ambiental-para-um-presente-sustentavel.png'
         ]);
 
         CourseModule::create([
@@ -280,8 +280,8 @@ class CourseSeeder extends Seeder
             'level' => 'Avançado',
             'category' => 'Gestão Pública',
             'owner' => 'Daniel Pagliuca',
-            'image' => 'imagens-banners/politica-municipal-educacao-ambiental.png',
-            'banner' => 'imagens-banners/politica-municipal-educacao-ambiental.png'
+            'image' => 'courses/images/politica-municipal-educacao-ambiental.png',
+            'banner' => 'courses/banners/politica-municipal-educacao-ambiental.png'
         ]);
 
         CourseModule::create([
@@ -416,8 +416,8 @@ class CourseSeeder extends Seeder
             'level' => 'Intermediário',
             'category' => 'Educação',
             'owner' => 'Grecianny Carvalho',
-            'image' => 'imagens-banners/bullying-conhecer-para-combater.png',
-            'banner' => 'imagens-banners/bullying-conhecer-para-combater.png'
+            'image' => 'courses/images/bullying-conhecer-para-combater.png',
+            'banner' => 'courses/banners/bullying-conhecer-para-combater.png'
         ]);
 
         CourseModule::create([
@@ -538,8 +538,8 @@ class CourseSeeder extends Seeder
             'level' => 'Técnico',
             'category' => 'Tecnologia',
             'owner' => 'Fundação Demócrito Rocha',
-            'image' => 'imagens-banners/gestao-fiscal-interfederativa.png',
-            'banner' => 'imagens-banners/gestao-fiscal-interfederativa.png'
+            'image' => 'courses/images/gestao-fiscal-interfederativa.png',
+            'banner' => 'courses/banners/gestao-fiscal-interfederativa.png'
         ]);
 
         CourseModule::create([

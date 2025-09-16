@@ -67,14 +67,16 @@ class Course extends Model
     public function getImageUrlAttribute()
     {
         if ($this->image) {
-            // Se a imagem está no diretório public, retorna a URL direta
+            // Se a imagem está no storage público, usa a URL do storage
+            if (Storage::disk('public')->exists($this->image)) {
+                return Storage::disk('public')->url($this->image);
+            }
+            // Fallback para diretório public
             if (file_exists(public_path($this->image))) {
                 return asset($this->image);
             }
-            // Fallback para storage
-            return Storage::disk('public')->exists($this->image)
-                ? Storage::disk('public')->url($this->image)
-                : $this->image;
+            // Se não encontrar, retorna a URL assumindo que está no storage
+            return Storage::disk('public')->url($this->image);
         }
         return null;
     }
@@ -82,14 +84,16 @@ class Course extends Model
     public function getBannerUrlAttribute()
     {
         if ($this->banner) {
-            // Se o banner está no diretório public, retorna a URL direta
+            // Se o banner está no storage público, usa a URL do storage
+            if (Storage::disk('public')->exists($this->banner)) {
+                return Storage::disk('public')->url($this->banner);
+            }
+            // Fallback para diretório public
             if (file_exists(public_path($this->banner))) {
                 return asset($this->banner);
             }
-            // Fallback para storage
-            return Storage::disk('public')->exists($this->banner)
-                ? Storage::disk('public')->url($this->banner)
-                : $this->banner;
+            // Se não encontrar, retorna a URL assumindo que está no storage
+            return Storage::disk('public')->url($this->banner);
         }
         return null;
     }
