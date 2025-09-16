@@ -43,77 +43,6 @@ class CourseController extends Controller
         return response()->json($courses);
     }
 
-    #[OA\Get(
-        path: '/courses/featured',
-        summary: 'Listar cursos em destaque',
-        description: 'Retorna todos os cursos marcados como destaque e ativos',
-        tags: ['Cursos'],
-        responses: [
-            new OA\Response(
-                response: 200,
-                description: 'Lista de cursos em destaque',
-                content: new OA\JsonContent(
-                    type: 'array',
-                    items: new OA\Items(ref: '#/components/schemas/Course')
-                )
-            )
-        ]
-    )]
-    public function featured(): JsonResponse
-    {
-        $courses = Course::with(['modules' => function($query) {
-            $query->orderBy('order');
-        }, 'competencies' => function($query) {
-            $query->orderBy('order');
-        }, 'decisionInfos' => function($query) {
-            $query->orderBy('type')->orderBy('order');
-        }])
-        ->where('featured', true)
-        ->where('active', true)
-        ->get();
-
-        return response()->json($courses);
-    }
-
-    #[OA\Get(
-        path: '/courses/{course}',
-        summary: 'Exibir curso específico',
-        description: 'Retorna os detalhes de um curso específico com seus módulos, competências e informações de decisão',
-        tags: ['Cursos'],
-        parameters: [
-            new OA\Parameter(
-                name: 'course',
-                description: 'ID do curso',
-                in: 'path',
-                required: true,
-                schema: new OA\Schema(type: 'integer')
-            )
-        ],
-        responses: [
-            new OA\Response(
-                response: 200,
-                description: 'Detalhes do curso',
-                content: new OA\JsonContent(ref: '#/components/schemas/Course')
-            ),
-            new OA\Response(
-                response: 404,
-                description: 'Curso não encontrado'
-            )
-        ]
-    )]
-    public function show(Course $course): JsonResponse
-    {
-        $course->load(['modules' => function($query) {
-            $query->orderBy('order');
-        }, 'competencies' => function($query) {
-            $query->orderBy('order');
-        }, 'decisionInfos' => function($query) {
-            $query->orderBy('type')->orderBy('order');
-        }]);
-
-        return response()->json($course);
-    }
-
     #[OA\Post(
         path: '/courses',
         summary: 'Criar novo curso',
@@ -208,7 +137,6 @@ class CourseController extends Controller
 
         $courseData = $request->except(['image', 'banner']);
 
-        // Converter valores boolean vindos de multipart/form-data
         if (isset($courseData['featured'])) {
             $courseData['featured'] = $courseData['featured'] === 'true' || $courseData['featured'] === '1' || $courseData['featured'] === 1 || $courseData['featured'] === true;
         }
@@ -217,12 +145,26 @@ class CourseController extends Controller
         }
 
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('courses/images', 'public');
+            // Sanitizar nome do arquivo
+            $file = $request->file('image');
+            $originalName = $file->getClientOriginalName();
+            $extension = $file->getClientOriginalExtension();
+            $sanitizedName = preg_replace('/[^a-zA-Z0-9\-_.]/', '_', pathinfo($originalName, PATHINFO_FILENAME));
+            $newFileName = $sanitizedName . '.' . $extension;
+
+            $imagePath = $file->storeAs('courses/images', $newFileName, 'public');
             $courseData['image'] = $imagePath;
         }
 
         if ($request->hasFile('banner')) {
-            $bannerPath = $request->file('banner')->store('courses/banners', 'public');
+            // Sanitizar nome do arquivo
+            $file = $request->file('banner');
+            $originalName = $file->getClientOriginalName();
+            $extension = $file->getClientOriginalExtension();
+            $sanitizedName = preg_replace('/[^a-zA-Z0-9\-_.]/', '_', pathinfo($originalName, PATHINFO_FILENAME));
+            $newFileName = $sanitizedName . '.' . $extension;
+
+            $bannerPath = $file->storeAs('courses/banners', $newFileName, 'public');
             $courseData['banner'] = $bannerPath;
         }
 
@@ -233,10 +175,81 @@ class CourseController extends Controller
         return response()->json($course, 201);
     }
 
-    #[OA\Put(
+    #[OA\Get(
+        path: '/courses/featured',
+        summary: 'Listar cursos em destaque',
+        description: 'Retorna todos os cursos marcados como destaque e ativos',
+        tags: ['Cursos'],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Lista de cursos em destaque',
+                content: new OA\JsonContent(
+                    type: 'array',
+                    items: new OA\Items(ref: '#/components/schemas/Course')
+                )
+            )
+        ]
+    )]
+    public function featured(): JsonResponse
+    {
+        $courses = Course::with(['modules' => function($query) {
+            $query->orderBy('order');
+        }, 'competencies' => function($query) {
+            $query->orderBy('order');
+        }, 'decisionInfos' => function($query) {
+            $query->orderBy('type')->orderBy('order');
+        }])
+        ->where('featured', true)
+        ->where('active', true)
+        ->get();
+
+        return response()->json($courses);
+    }
+
+    #[OA\Get(
         path: '/courses/{course}',
+        summary: 'Exibir curso específico',
+        description: 'Retorna os detalhes de um curso específico com seus módulos, competências e informações de decisão',
+        tags: ['Cursos'],
+        parameters: [
+            new OA\Parameter(
+                name: 'course',
+                description: 'ID do curso',
+                in: 'path',
+                required: true,
+                schema: new OA\Schema(type: 'integer')
+            )
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Detalhes do curso',
+                content: new OA\JsonContent(ref: '#/components/schemas/Course')
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'Curso não encontrado'
+            )
+        ]
+    )]
+    public function show(Course $course): JsonResponse
+    {
+        $course->load(['modules' => function($query) {
+            $query->orderBy('order');
+        }, 'competencies' => function($query) {
+            $query->orderBy('order');
+        }, 'decisionInfos' => function($query) {
+            $query->orderBy('type')->orderBy('order');
+        }]);
+
+        return response()->json($course);
+    }
+
+    #[OA\Post(
+        path: '/courses/{course}/update',
         summary: 'Atualizar curso',
-        description: 'Atualiza os dados de um curso existente',
+        description: 'Atualiza os dados de um curso existente.',
         tags: ['Cursos'],
         parameters: [
             new OA\Parameter(
@@ -304,28 +317,32 @@ class CourseController extends Controller
     )]
     public function update(Request $request, Course $course): JsonResponse
     {
+        if ($request->has('_method') && $request->_method === 'PUT') {
+            $request->request->remove('_method');
+        }
+
         $validator = Validator::make($request->all(), [
-            'name' => 'string|max:255',
-            'description' => 'string',
-            'type' => 'string|max:255',
-            'main_category' => 'string|max:255',
-            'duration_hours' => 'integer|min:1',
-            'modules_count' => 'integer|min:1',
-            'access_period_months' => 'integer|min:1',
-            'modality' => 'string|max:255',
-            'price' => 'numeric|min:0',
-            'enrollment_fee' => 'numeric|min:0',
-            'max_installments' => 'integer|min:1',
-            'installment_value' => 'numeric|min:0',
-            'featured' => 'nullable|string|in:true,false,0,1',
-            'active' => 'nullable|string|in:true,false,0,1',
+            'name' => 'sometimes|required|string|max:255',
+            'description' => 'sometimes|required|string',
+            'type' => 'sometimes|string|max:255',
+            'main_category' => 'sometimes|string|max:255',
+            'duration_hours' => 'sometimes|integer|min:1',
+            'modules_count' => 'sometimes|integer|min:1',
+            'access_period_months' => 'sometimes|integer|min:1',
+            'modality' => 'sometimes|string|max:255',
+            'price' => 'sometimes|numeric|min:0',
+            'enrollment_fee' => 'sometimes|numeric|min:0',
+            'max_installments' => 'sometimes|integer|min:1',
+            'installment_value' => 'sometimes|numeric|min:0',
+            'featured' => 'sometimes|nullable|string|in:true,false,0,1',
+            'active' => 'sometimes|nullable|string|in:true,false,0,1',
             'target_audience' => 'nullable|string',
             'payment_info' => 'nullable|string',
             'payment_conditions' => 'nullable|string',
             'instructor' => 'nullable|string|max:255',
-            'level' => 'string|max:255',
+            'level' => 'sometimes|string|max:255',
             'category' => 'nullable|string|max:255',
-            'owner' => 'string|max:255',
+            'owner' => 'sometimes|required|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
@@ -337,15 +354,18 @@ class CourseController extends Controller
             ], 422);
         }
 
-        $courseData = $request->except(['image', 'banner']);
+        $courseData = $request->except(['image', 'banner', '_method']);
 
-        // Converter valores boolean vindos de multipart/form-data
         if (isset($courseData['featured'])) {
             $courseData['featured'] = $courseData['featured'] === 'true' || $courseData['featured'] === '1' || $courseData['featured'] === 1 || $courseData['featured'] === true;
         }
         if (isset($courseData['active'])) {
             $courseData['active'] = $courseData['active'] === 'true' || $courseData['active'] === '1' || $courseData['active'] === 1 || $courseData['active'] === true;
         }
+
+        $courseData = array_filter($courseData, function($value) {
+            return $value !== null && $value !== '';
+        });
 
         if ($request->hasFile('image')) {
             if ($course->image && Storage::disk('public')->exists($course->image)) {

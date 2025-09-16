@@ -11,9 +11,21 @@ echo "✅ PostgreSQL conectado!"
 
 # Criar diretórios se não existirem
 mkdir -p storage/logs storage/framework/cache storage/framework/sessions storage/framework/views
-mkdir -p bootstrap/cache public/imagens-banners
-chown -R www-data:www-data storage bootstrap/cache public/imagens-banners
-chmod -R 775 storage bootstrap/cache public/imagens-banners
+mkdir -p bootstrap/cache storage/app/public/courses/images storage/app/public/courses/banners
+chown -R www-data:www-data storage bootstrap/cache
+chmod -R 775 storage bootstrap/cache
+
+# Copiar imagens dos cursos para as pastas corretas no storage
+echo "📸 Copiando imagens dos cursos..."
+if [ -d "public/imagens-banners" ]; then
+    # Copiar imagens como banners (imagens maiores)
+    cp public/imagens-banners/*.png storage/app/public/courses/banners/ 2>/dev/null || true
+
+    # Copiar as mesmas imagens como thumbnails/images
+    cp public/imagens-banners/*.png storage/app/public/courses/images/ 2>/dev/null || true
+
+    echo "✅ Imagens copiadas para storage/app/public/courses/"
+fi
 
 # Gerar APP_KEY se vazio
 php artisan key:generate --force

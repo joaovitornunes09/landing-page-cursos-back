@@ -77,7 +77,9 @@ docker exec cursos-backend php artisan cache:clear
 > - Gera a `APP_KEY`
 > - Configura permissões
 > - Executa migrations
-> - Popula dados iniciais
+> - Cria link do storage (`storage:link`)
+> - Copia imagens para `storage/app/public/courses/`
+> - Popula dados iniciais com URLs de imagens funcionais
 
 ## 📚 API
 
@@ -155,3 +157,5 @@ A aplicação já resolve automaticamente:
 ✅ **Permissões** - Configuradas no container
 ✅ **Migrations** - Executadas na inicialização
 ✅ **Storage Link** - Criado automaticamente
+✅ **Imagens dos Cursos** - Copiadas automaticamente para `storage/app/public/courses/`
+✅ **Seeds** - Dados iniciais populados com imagens configuradas

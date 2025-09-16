@@ -14,9 +14,7 @@
     "paths": {
         "/courses": {
             "get": {
-                "tags": [
-                    "Cursos"
-                ],
+                "tags": ["Cursos"],
                 "summary": "Listar cursos ativos",
                 "description": "Retorna todos os cursos ativos com seus módulos, competências e informações de decisão",
                 "operationId": "75403048c36d79fe464ce4716c204c61",
@@ -37,9 +35,7 @@
                 }
             },
             "post": {
-                "tags": [
-                    "Cursos"
-                ],
+                "tags": ["Cursos"],
                 "summary": "Criar novo curso",
                 "description": "Cria um novo curso com os dados fornecidos",
                 "operationId": "56ff5a96b473881afe594ca81aeb754b",
@@ -48,11 +44,7 @@
                     "content": {
                         "multipart/form-data": {
                             "schema": {
-                                "required": [
-                                    "name",
-                                    "description",
-                                    "owner"
-                                ],
+                                "required": ["name", "description", "owner"],
                                 "properties": {
                                     "name": {
                                         "description": "Nome do curso",
@@ -206,9 +198,7 @@
         },
         "/courses/featured": {
             "get": {
-                "tags": [
-                    "Cursos"
-                ],
+                "tags": ["Cursos"],
                 "summary": "Listar cursos em destaque",
                 "description": "Retorna todos os cursos marcados como destaque e ativos",
                 "operationId": "d7109f258b8483bb0ab98466f689ec26",
@@ -231,9 +221,7 @@
         },
         "/courses/{course}": {
             "get": {
-                "tags": [
-                    "Cursos"
-                ],
+                "tags": ["Cursos"],
                 "summary": "Exibir curso específico",
                 "description": "Retorna os detalhes de um curso específico com seus módulos, competências e informações de decisão",
                 "operationId": "10f1a3f466f9f189b72f4faa087511d1",
@@ -264,13 +252,50 @@
                     }
                 }
             },
-            "put": {
-                "tags": [
-                    "Cursos"
+            "delete": {
+                "tags": ["Cursos"],
+                "summary": "Excluir curso",
+                "description": "Remove um curso do sistema",
+                "operationId": "b3c52c7b9051fe701b0428f229852379",
+                "parameters": [
+                    {
+                        "name": "course",
+                        "in": "path",
+                        "description": "ID do curso",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "Curso excluído com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Curso não encontrado"
+                    }
+                }
+            }
+        },
+        "/courses/{course}/update": {
+            "post": {
+                "tags": ["Cursos"],
                 "summary": "Atualizar curso",
-                "description": "Atualiza os dados de um curso existente",
-                "operationId": "9895d92d339f9f8cbe251161674a52f2",
+                "description": "Atualiza os dados de um curso existente.",
+                "operationId": "93f7cb724066fee3bf9a79f0925aadf3",
                 "parameters": [
                     {
                         "name": "course",
@@ -437,45 +462,6 @@
                                 }
                             }
                         }
-                    }
-                }
-            },
-            "delete": {
-                "tags": [
-                    "Cursos"
-                ],
-                "summary": "Excluir curso",
-                "description": "Remove um curso do sistema",
-                "operationId": "b3c52c7b9051fe701b0428f229852379",
-                "parameters": [
-                    {
-                        "name": "course",
-                        "in": "path",
-                        "description": "ID do curso",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Curso excluído com sucesso",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Curso não encontrado"
                     }
                 }
             }
